@@ -37,10 +37,3 @@ jobs:
           source: "dist/*" # 构建后的文件
           target: "/var/www/mewtopia" # 部署目标目录
           strip_components: 1
-
-      # Step 5: 重启 Nginx 确保新内容生效
-      - name: Restart Nginx
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} sudo systemctl restart nginx
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
