@@ -41,6 +41,6 @@ jobs:
       # Step 5: 重启 Nginx 确保新内容生效
       - name: Restart Nginx
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "whoami; sudo systemctl restart nginx"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} sudo systemctl restart nginx
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
