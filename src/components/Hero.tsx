@@ -1,6 +1,7 @@
-import cat from "../assets/cat.gif";
 import colorful from "../assets/colorful.jpg";
-import "@dotlottie/player-component";
+import Lottie from "lottie-react";
+import cat from "../assets/cat.json";
+
 export default function Hero() {
   return (
     <>
@@ -18,8 +19,11 @@ export default function Hero() {
               <h1 className="mx-5 sm:mx-5 text-5xl font-bold mb-1">
                 Welcome to Mewtopia.
               </h1>
-              <span className="inline-block relative top-6">
-                <img className="w-24" src={cat} alt="" />
+              <span
+                className="inline-block relative top-6"
+                style={{ width: 100, height: 100 }}
+              >
+                <Lottie animationData={cat} />
               </span>
             </div>
 

@@ -4,3 +4,4 @@ declare namespace JSX {
     "dotlottie-player": any;
   }
 }
+declare module "react-lottie";
