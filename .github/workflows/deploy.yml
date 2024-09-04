@@ -1,0 +1,45 @@
+name: Deploy to Mew Server
+
+on:
+  push:
+    branches:
+      - main # 每次推送到 main 分支时触发部署
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: MewServer # 使用你创建的环境
+
+    steps:
+      # Step 1: 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: 设置 Node.js 环境 (使用 Node.js 20.11)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20" # 设置 Node.js 版本为 20.11
+
+      # Step 3: 安装依赖并构建项目 (使用 yarn)
+      - name: Install dependencies and build
+        run: |
+          yarn install
+          yarn build
+
+      # Step 4: 通过 SSH 将构建文件部署到服务器
+      - name: Deploy to server
+        uses: appleboy/scp-action@v0.1.3 # 使用 scp-action 进行文件传输
+        with:
+          host: ${{ secrets.SERVER_IP }} # 引用 Environment Secret
+          username: ${{ secrets.SERVER_USER }} # 引用 Environment Secret
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # 引用 Environment Secret
+          source: "dist/*" # 构建后的文件
+          target: "/var/www/mewtopia" # 部署目标目录
+
+      # Step 5: 重启 Nginx 确保新内容生效
+      - name: Restart Nginx
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "sudo systemctl restart nginx"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
